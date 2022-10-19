@@ -8,6 +8,7 @@
 #define MAX_LINE (1024)
 #define MAX_FILE_NAME (256)
 #define MAX_NAME (150)
+#define MAX_BOD (50)
 
 typedef struct
 {
@@ -30,10 +31,9 @@ int main(void)
 	printf("Broj studenata u datoteci %s je %d", filename, countStudentsFromFile(filename));
 
 	_student* osoba;
-
 	osoba = malloc(countStudentsFromFile(filename) * sizeof(_student));
 
-	podaciStudenta(filename,osoba);
+	podaciStudenta(filename, osoba);
 
 	return 0;
 }
@@ -45,7 +45,7 @@ int countStudentsFromFile(char* filename)
 	char buffer[MAX_LINE] = { 0 };
 
 	fp = fopen(filename, "r");
-	if (fp = NULL)
+	if (fp == NULL)
 	{
 		printf("Dear customer, the file %s didn't open!\r\n", filename);
 		return FILE_DIDNT_OPEN_ERROR;
@@ -53,6 +53,7 @@ int countStudentsFromFile(char* filename)
 
 	while (!feof(fp))
 	{ // while not found end of file (EOF)
+		fgets(buffer, MAX_LINE, fp);
 		if (strcmp("\n", buffer) != 0)
 		{
 			count++;
@@ -69,30 +70,25 @@ void podaciStudenta(char* filename, _student* osoba)
 	char buffer[MAX_LINE] = { 0 };
 
 	fp = fopen(filename, "r");
-	if (fp = NULL)
+	if (fp == NULL)
 	{
 		printf("Dear customer, the file %s didn't open!\r\n", filename);
-		return FILE_DIDNT_OPEN_ERROR;
+
 	}
+
+	int i = 0;
 
 	while (!feof(fp))
 	{ // while not found end of file (EOF)
-		if (strcmp("\n", buffer) != 0)
-		{
-			for (int i = 0; i < countStudentsFromFile(filename); i++)
-			{
-				fscanf(filename, "%s %s %d", osoba[i].ime, osoba[i].prezime, osoba[i].bodovi);
-				osoba[i].relativan_br_bodova = osoba[i].bodovi / 50 * 100;
-			}
-		}
-	}
-
-	for (int i = 0; i < countStudentsFromFile(filename); i++)
-	{
-		printf("%s %s %d %d", osoba[i].ime, osoba[i].prezime, osoba[i].bodovi, osoba[i].relativan_br_bodova);
+		fscanf(fp, "%s %s %d", osoba[i].ime, osoba[i].prezime, &osoba[i].bodovi);
+		osoba[i].relativan_br_bodova = (((float)osoba[i].bodovi) / MAX_BOD) * 100;
+		i++;
 	}
 
 	fclose(fp);
-	return 0;
 
+	for (int j = 0; j < countStudentsFromFile(filename); j++)
+	{
+		printf("\n%s %s %d %d", osoba[j].ime, osoba[j].prezime, osoba[j].bodovi, osoba[j].relativan_br_bodova);
+	}
 }
