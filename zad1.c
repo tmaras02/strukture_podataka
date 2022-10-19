@@ -73,7 +73,6 @@ void podaciStudenta(char* filename, _student* osoba)
 	if (fp == NULL)
 	{
 		printf("Dear customer, the file %s didn't open!\r\n", filename);
-
 	}
 
 	int i = 0;
