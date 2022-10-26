@@ -19,7 +19,7 @@ typedef struct
 }_student;
 
 int countStudentsFromFile(char* filename);
-void podaciStudenta(char* filename, _student*);
+int podaciStudenta(char* filename, _student*);
 
 int main(void)
 {
