@@ -1,0 +1,137 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+#define MAX_LINE 1024
+#define ERROR (-1)
+struct _person;
+typedef struct _person* position;
+typedef struct _person {
+	char name[MAX_LINE];
+	char surname[MAX_LINE];
+	int year;
+	position next;
+}person;
+int delete(position p);
+int inputP(position P);
+int print(position p);
+int inputK(position p);
+int search(position p);
+
+int main() {
+	person Head;
+	Head.next = NULL;
+
+	int choice = 0;
+	int choice2 = 1;
+	while (choice2) {
+
+		printf("Izaberite sto zelite uciniti:\n 1 - Unos na pocetak\n 2 - Ispis \n 3 - Unos na kraj\n 4 - Trazenje po prezimenu\n 5 - Brisanje elementa\n");
+		scanf("%d", &choice);
+		if (choice == 1) {
+			inputP(&Head);
+		}
+		else if (choice == 2) {
+			print(&Head);
+		}
+		else if (choice == 3) {
+			inputK(&Head);
+		}
+		else if (choice == 4) {
+			search(&Head);
+		}
+		else if (choice == 5) {
+			delete(&Head);
+		}
+		else {
+			printf("Pogrešan unos\n");
+		}
+		printf("Zelite li jos nesto uciniti?\n 0 - kraj programa\n 1 - Nastavak\n");
+		scanf("%d", &choice2);
+		if (choice2 != 0 && choice2 != 1) {
+			printf("Pogresan unos\n");
+		}
+	}
+	return 0;
+}
+int inputP(position P) {
+	position q = NULL;
+	q = (position)malloc(sizeof(person));
+	if (q == NULL)
+	{
+		printf("\nNeuspjesna alokacija memorije!\n");
+		return ERROR;
+	}
+	printf("Upisite ime osobe\n");
+	scanf("%s", q->name);
+	printf("Upisite prezime osobe\n");
+	scanf("%s", q->surname);
+	printf("Upisite godinu rodenja osobe\n");
+	scanf("%d", &q->year);
+	q->next = P->next;
+	P->next = q;
+	return 0;
+}
+int print(position p) {
+	position q = NULL;
+	q = p->next;
+	while (q != NULL) {
+		printf("%s %s %d\n", q->name, q->surname, q->year);
+		q = q->next;
+	}
+	return 0;
+}
+int inputK(position p) {
+	position q = NULL;
+	q = (position)malloc(sizeof(person));
+	if (q == NULL)
+	{
+		printf("\nNeuspjesna alokacija memorije!\n");
+		return ERROR;
+	}
+	printf("Upisite ime osobe\n");
+	scanf("%s", q->name);
+	printf("Upisite prezime osobe\n");
+	scanf("%s", q->surname);
+	printf("Upisite godinu rodenja osobe\n");
+	scanf("%d", &q->year);
+	while (p->next != NULL) {
+		p = p->next;
+	}
+	q->next = p->next;
+	p->next = q;
+	return 0;
+}
+int search(position p) {
+	char tempsur[MAX_LINE] = { 0 };
+	printf("Upisite prezime osobe koju trazite\n");
+	scanf("%s", tempsur);
+	while (p != NULL && strcmp(tempsur, p->surname) != 0) {
+		p = p->next;
+	}
+	if (p == NULL) {
+		printf("Osoba koju trazite ne postoji\n");
+	}
+	else {
+		printf("%s %s %d\n", p->name, p->surname, p->year);
+	}
+	return 0;
+}
+int delete(position p) {
+	position q = NULL;
+	char tempsur[MAX_LINE] = { 0 };
+	printf("Upisite prezime osobe koju zelite izbrisati\n");
+	scanf("%s", tempsur);
+	while (p->next != NULL && strcmp(tempsur, p->surname) != 0) {
+		q = p;
+		p = p->next;
+	}
+	if (p->next == NULL) {
+		printf("Osoba koju zelite izbrisati ne postoji\n");
+	}
+	else {
+		q->next = p->next;
+		free(p);
+	}
+	return 0;
+}
