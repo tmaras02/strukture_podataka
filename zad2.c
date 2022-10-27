@@ -5,6 +5,7 @@
 #include <string.h>
 
 #define MAX_NAME (1024)
+#define ERROR (-1)
 
 struct _osoba;
 typedef struct _osoba* Pozicija;
