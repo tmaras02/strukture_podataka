@@ -1,9 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
+
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
+
 #define MAX_LINE 1024
 #define ERROR (-1)
+
 struct _person;
 typedef struct _person* position;
 typedef struct _person {
@@ -12,11 +15,18 @@ typedef struct _person {
 	int year;
 	position next;
 }person;
+
 int delete(position p);
 int inputP(position P);
 int print(position p);
 int inputK(position p);
 int search(position p);
+int deleteAll(position p);
+int inputAft(position p);
+int inputBfr(position p);
+int sort(position p);
+int write(position p);
+int read();
 
 int main() {
 	person Head;
@@ -26,8 +36,9 @@ int main() {
 	int choice2 = 1;
 	while (choice2) {
 
-		printf("Izaberite sto zelite uciniti:\n 1 - Unos na pocetak\n 2 - Ispis \n 3 - Unos na kraj\n 4 - Trazenje po prezimenu\n 5 - Brisanje elementa\n");
-		scanf("%d", &choice);
+		printf("Izaberite sto zelite uciniti:\n 1 - Unos na pocetak\n 2 - Ispis \n 3 - Unos na kraj\n 4 - Trazenje po prezimenu\n 5 - Brisanje elementa\n 6 - Unos nakon osobe\n 7 - Unos prije osobe\n 8 - sortiranje po prezimenima\n 9 - unos u datoteku\n 10 - ispis iz datoteke\n\n");
+		scanf(" %d", &choice);
+
 		if (choice == 1) {
 			inputP(&Head);
 		}
@@ -43,17 +54,38 @@ int main() {
 		else if (choice == 5) {
 			delete(&Head);
 		}
+		else if (choice == 6) {
+			inputAft(&Head);
+		}
+		else if (choice == 7) {
+			inputBfr(&Head);
+		}
+		else if (choice == 8) {
+			sort(&Head);
+		}
+		else if (choice == 9) {
+			write(Head.next);
+		}
+		else if (choice == 10) {
+			read();
+		}
 		else {
 			printf("Pogrešan unos\n");
 		}
-		printf("Zelite li jos nesto uciniti?\n 0 - kraj programa\n 1 - Nastavak\n");
+
+		printf("\nZelite li jos nesto uciniti?\n 0 - kraj programa\n 1 - Nastavak\n");
 		scanf("%d", &choice2);
+
 		if (choice2 != 0 && choice2 != 1) {
 			printf("Pogresan unos\n");
 		}
 	}
+
+	deleteAll(&Head);
+
 	return 0;
 }
+
 int inputP(position P) {
 	position q = NULL;
 	q = (position)malloc(sizeof(person));
@@ -62,16 +94,17 @@ int inputP(position P) {
 		printf("\nNeuspjesna alokacija memorije!\n");
 		return ERROR;
 	}
-	printf("Upisite ime osobe\n");
+	printf("\nUpisite ime osobe: \n");
 	scanf("%s", q->name);
-	printf("Upisite prezime osobe\n");
+	printf("Upisite prezime osobe: \n");
 	scanf("%s", q->surname);
-	printf("Upisite godinu rodenja osobe\n");
+	printf("Upisite godinu rodenja osobe: \n");
 	scanf("%d", &q->year);
 	q->next = P->next;
 	P->next = q;
 	return 0;
 }
+
 int print(position p) {
 	position q = NULL;
 	q = p->next;
@@ -81,6 +114,7 @@ int print(position p) {
 	}
 	return 0;
 }
+
 int inputK(position p) {
 	position q = NULL;
 	q = (position)malloc(sizeof(person));
@@ -89,11 +123,11 @@ int inputK(position p) {
 		printf("\nNeuspjesna alokacija memorije!\n");
 		return ERROR;
 	}
-	printf("Upisite ime osobe\n");
+	printf("\nUpisite ime osobe: \n");
 	scanf("%s", q->name);
-	printf("Upisite prezime osobe\n");
+	printf("Upisite prezime osobe: \n");
 	scanf("%s", q->surname);
-	printf("Upisite godinu rodenja osobe\n");
+	printf("Upisite godinu rodenja osobe: \n");
 	scanf("%d", &q->year);
 	while (p->next != NULL) {
 		p = p->next;
@@ -102,9 +136,10 @@ int inputK(position p) {
 	p->next = q;
 	return 0;
 }
+
 int search(position p) {
 	char tempsur[MAX_LINE] = { 0 };
-	printf("Upisite prezime osobe koju trazite\n");
+	printf("\nUpisite prezime osobe koju trazite: \n");
 	scanf("%s", tempsur);
 	while (p != NULL && strcmp(tempsur, p->surname) != 0) {
 		p = p->next;
@@ -114,13 +149,15 @@ int search(position p) {
 	}
 	else {
 		printf("%s %s %d\n", p->name, p->surname, p->year);
+		printf("\nAdresa trazene osobe je: %p\n", p);
 	}
 	return 0;
 }
+
 int delete(position p) {
 	position q = NULL;
 	char tempsur[MAX_LINE] = { 0 };
-	printf("Upisite prezime osobe koju zelite izbrisati\n");
+	printf("\nUpisite prezime osobe koju zelite izbrisati: \n");
 	scanf("%s", tempsur);
 	while (p->next != NULL && strcmp(tempsur, p->surname) != 0) {
 		q = p;
@@ -133,5 +170,127 @@ int delete(position p) {
 		q->next = p->next;
 		free(p);
 	}
+	return 0;
+}
+
+int inputBfr(position p)
+{
+	char tempsur[MAX_LINE] = { 0 };
+	position n = NULL;
+	position prev = NULL;
+	n = (position)malloc(sizeof(person));
+	
+	if (n == NULL)
+	{
+		printf("Neuspjesna alokacija memorije!\n");
+		return ERROR;
+	}
+
+	printf("Unesite prezime osobe ispred koje zelis dodati novu:\n");
+	scanf(" %s", tempsur);
+
+	printf("\nUnesite ime osobe: \n");
+	scanf(" %s", n->name);
+	printf("Unesi prezime osobe: \n");
+	scanf(" %s", n->surname);
+	printf("Unesi godinu rodenja osobe: \n");
+	scanf("%d", &n->year);
+
+	prev = p;
+	while (p->next != NULL && strcmp(tempsur, p->surname) != 0)
+	{
+		prev = p;
+		p = p->next;
+	}
+
+	if (p == NULL) {
+		printf("Nema osobe koju trazite\n");
+	}
+	else{
+		n->next = p;
+		prev->next = n;
+	}
+}
+
+int sort(position p)
+{
+	position q = NULL;
+	position prev_q = NULL;
+	position temp = NULL;
+	position end = NULL;
+
+	while (p->next != end)
+	{
+		prev_q = p;
+		q = p->next;
+		while (q->next != end)
+		{
+			if (strcmp(q->surname, q->next->surname) > 0)
+			{
+				temp = q->next;
+				prev_q->next = temp;
+				q->next = temp->next;
+				temp->next = q;
+
+				q = temp;
+			}
+
+			prev_q = q;
+			q = q->next;
+		}
+		end = q;
+	}
+	
+	return 0;
+}
+
+int read()
+{
+	char file[MAX_LINE];
+	int b = 0;
+	person Head;
+	Head.next = NULL;
+	position p = &Head;
+	position q = NULL;
+
+	printf("Unesite ime datoteke iz koje zelite ucitati listu: \n");
+	scanf(" %s", &file);
+
+	FILE* fp = NULL;
+	fp = fopen(file, "r");
+
+	if (fp == NULL)
+	{
+		printf("Greska u otvaranju datoteke!\n");
+		return ERROR;
+	}
+
+	while (!feof(fp))
+	{
+		if (fgetc(fp) == '\n')
+			b++;
+	}
+	rewind(fp);
+
+	if (b != 0)
+	{
+		for (int i = 0; i < b; i++) {
+			q = (position)malloc(sizeof(person));
+			if (q == NULL)
+			{
+				printf("Neuspjesna alokacija memorije!\n");
+				return ERROR;
+			}
+			fscanf(fp, "%s %s %d", q->name, q->surname, &q->year);
+			q->next = p->next;
+			p->next = q;
+			p = p->next;
+		}
+	}
+
+	fclose(fp);
+
+	print(Head.next);
+
 	return 0;
 }
