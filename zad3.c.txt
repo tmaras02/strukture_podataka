@@ -173,6 +173,51 @@ int delete(position p) {
 	return 0;
 }
 
+int inputAft(position p) {
+	char tempsur[MAX_LINE] = { 0 };
+	position q;
+	q = (position)malloc(sizeof(person));
+
+	if (q == NULL)
+	{
+		printf("\nNeuspjesna alokacija memorije!\n");
+		return ERROR;
+	}
+
+	printf("\nUpisite prezime osobe iza koje zelite upisati novog clana\n");
+	scanf("%s", tempsur);
+	printf("\nUpisite ime osobe: \n");
+	scanf("%s", q->name);
+	printf("Upisite prezime osobe: \n");
+	scanf("%s", q->surname);
+	printf("Upisite godinu rodenja osobe: \n");
+	scanf("%d", &q->year);
+
+	while (p->next != NULL && strcmp(tempsur, q->surname) != 0) {
+		p = p->next;
+	}
+
+	if (p == NULL) {
+		printf("Nema osobe koju trazite\n");
+	}
+	else {
+		q->next = p->next;
+		p->next = q;
+	}
+	
+	return 0;
+}
+
+int deleteAll(position p) {
+	position q = NULL;
+	while (p->next != 0) {
+		q = p->next;
+		p->next = q->next;
+		free(q);
+	}
+	return 0;
+}
+
 int inputBfr(position p)
 {
 	char tempsur[MAX_LINE] = { 0 };
@@ -241,6 +286,28 @@ int sort(position p)
 		end = q;
 	}
 	
+	return 0;
+}
+
+int write(position p)
+{
+	FILE* fp = NULL;
+	fp = fopen("persons.txt", "w");
+
+	if (fp == NULL)
+	{
+		printf("Greska u otvaranju datoteke!\n");
+		return ERROR;
+	}
+
+	while (p != NULL)
+	{
+		fprintf(fp, "%s\t %s\t %d\t\n", p->name, p->surname, p->year);
+		p = p->next;
+	}
+
+	fclose(fp);
+
 	return 0;
 }
 
