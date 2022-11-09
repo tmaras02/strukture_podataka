@@ -62,7 +62,7 @@ int input(char filename[MAX_LINE],position pos,position pos2) {
 	fp = fopen(filename, "r");
 	if (fp == NULL)
 	{
-		printf("Dear customer, the file %s didn't open!\r\n", filename);
+		printf("Dear customer, the file %s didn't open! Possible wrong insert!\r\n", filename);
 		return ERROR;
 	}
 
