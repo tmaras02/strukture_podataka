@@ -52,9 +52,19 @@ int main() {
 int input(char filename[MAX_LINE],position pos,position pos2) {
 	position q = NULL;
 	q = (position)malloc(sizeof(polinom));
+	if (q == NULL)
+	{
+		printf("\nNeuspjesna alokacija memorije!\n");
+		return ERROR;
+	}
 
 	FILE* fp = NULL;
 	fp = fopen(filename, "r");
+	if (fp == NULL)
+	{
+		printf("Dear customer, the file %s didn't open!\r\n", filename);
+		return ERROR;
+	}
 
 	char buffer[MAX_LINE];
 	char* p = buffer;
@@ -71,6 +81,11 @@ int input(char filename[MAX_LINE],position pos,position pos2) {
 		q->exp = e;
 		sort(pos,q);
 		q = (position)malloc(sizeof(polinom));
+		if (q == NULL)
+		{
+			printf("\nNeuspjesna alokacija memorije!\n");
+			return ERROR;
+		}
 	}
 
 	fgets(buffer, MAX_LINE, fp);
@@ -83,6 +98,11 @@ int input(char filename[MAX_LINE],position pos,position pos2) {
 		q->exp = e;
 		sort(pos2, q);
 		q = (position)malloc(sizeof(polinom));
+		if (q == NULL)
+		{
+			printf("\nNeuspjesna alokacija memorije!\n");
+			return ERROR;
+		}
 	}
 
 	return 0;
@@ -123,6 +143,12 @@ int add(position p1, position p2, position rez){
 
 	while (p1!= NULL && p2!= NULL) {
 		q = (position)malloc(sizeof(polinom));
+		if (q == NULL)
+		{
+			printf("\nNeuspjesna alokacija memorije!\n");
+			return ERROR;
+		}
+
 		if (p1->exp > p2->exp) {
 			q->coef = p2->coef;
 			q->exp = p2->exp;
@@ -147,6 +173,11 @@ int add(position p1, position p2, position rez){
 	if (p1 == NULL) {
 		while (p2 != NULL) {
 			q = (position)malloc(sizeof(polinom));
+			if (q == NULL)
+			{
+				printf("\nNeuspjesna alokacija memorije!\n");
+				return ERROR;
+			}
 			q->coef = p2->coef;
 			q->exp = p2->exp;
 			sort(rez, q);
@@ -157,6 +188,11 @@ int add(position p1, position p2, position rez){
 	if (p2 == NULL) {
 		while (p1!= NULL) {
 			q = (position)malloc(sizeof(polinom));
+			if (q == NULL)
+			{
+				printf("\nNeuspjesna alokacija memorije!\n");
+				return ERROR;
+			}
 			q->coef = p1->coef;
 			q->exp = p1->exp;
 			sort(rez, q);
@@ -174,6 +210,11 @@ int check(position p) {
 
 	position q;
 	q = (position)malloc(sizeof(polinom));
+	if (q == NULL)
+	{
+		printf("\nNeuspjesna alokacija memorije!\n");
+		return ERROR;
+	}
 	q = p->next;
 
 	while (q != NULL) {
@@ -202,6 +243,11 @@ int multiply(position p1, position p2, position rez) {
 	while (p1 != NULL) {
 		while (p2 != NULL) {
 			q = (position)malloc(sizeof(polinom));
+			if (q == NULL)
+			{
+				printf("\nNeuspjesna alokacija memorije!\n");
+				return ERROR;
+			}
 			q->coef = p1->coef * p2->coef;
 			q->exp = p1->exp + p2->exp;
 			sort(rez, q);
