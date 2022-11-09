@@ -1,0 +1,3 @@
+﻿  Source.c
+C:\Users\roko\source\repos\Zad4Struk\Zad4Struk\Source.c(37,10): warning C4013: 'multiply' undefined; assuming extern returning int
+  Zad4Struk.vcxproj -> C:\Users\roko\source\repos\Zad4Struk\Debug\Zad4Struk.exe
