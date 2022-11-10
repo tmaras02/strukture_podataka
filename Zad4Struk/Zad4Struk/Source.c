@@ -20,6 +20,7 @@ int sort(position,position);
 int print(position);
 int add(position, position, position);
 int check(position);
+int deleteAll(position p);
 
 int main() {
 	polinom Head;
@@ -46,6 +47,11 @@ int main() {
 	print(&Headadd);
 	print(&Headmul);
 
+	deleteAll(&Head);
+	deleteAll(&Head2);
+	deleteAll(&Headadd);
+	deleteAll(&Headmul);
+
 	return 0;
 }
 
@@ -62,7 +68,7 @@ int input(char filename[MAX_LINE],position pos,position pos2) {
 	fp = fopen(filename, "r");
 	if (fp == NULL)
 	{
-		printf("Dear customer, the file %s didn't open! Possible wrong insert!\r\n", filename);
+		printf("Dear customer, the file %s didn't open!\r\n", filename);
 		return ERROR;
 	}
 
@@ -259,5 +265,15 @@ int multiply(position p1, position p2, position rez) {
 
 	check(rez);
 
+	return 0;
+}
+
+int deleteAll(position p) {
+	position q = NULL;
+	while (p->next != 0) {
+		q = p->next;
+		p->next = q->next;
+		free(q);
+	}
 	return 0;
 }
