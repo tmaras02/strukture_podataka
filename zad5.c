@@ -36,7 +36,7 @@ int main(void)
 
     readFromFile(filename, line);
 
-    printf("Postfix from file: %s\n", line);
+    printf("\nPostfix from file: %s\n", line);
 
     result = top->next->number;
     printf("\nResult: %.2f\n", result);
