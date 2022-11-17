@@ -19,7 +19,6 @@ int printPostfix();
 int pop(float*);
 int push(float*);
 int check();
-int Delete();
 position top = NULL;
 
 int main() {
