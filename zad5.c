@@ -32,7 +32,7 @@ int main(void)
 
     printf("Enter the file name: ");
     scanf(" %s", filename);
-    printf("\n\n");
+    printf("\n");
 
     readFromFile(filename, line);
 
