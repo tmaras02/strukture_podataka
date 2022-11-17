@@ -10,15 +10,16 @@
 struct _member;
 typedef struct _member* position;
 typedef struct _member {
-	int number;
+	float number;
 	position next;
 }member;
 
-int fileinput(char[MAX_LINE]);
+float fileinput(char[MAX_LINE]);
 int printPostfix();
 int pop(float*);
 int push(float*);
 int check();
+int Delete();
 position top = NULL;
 
 int main() {
@@ -39,7 +40,7 @@ int main() {
 	return 0;
 }
 
-int fileinput(char filename[MAX_LINE]) {
+float fileinput(char filename[MAX_LINE]) {
 	FILE* fp = NULL;
 	fp = fopen(filename, "r");
 	if (fp == NULL) {
@@ -101,6 +102,7 @@ int fileinput(char filename[MAX_LINE]) {
 			}
 			else {
 				printf("Nepoznata operacija u datoteci\n");
+				return ERROR;
 			}
 
 		}
@@ -172,4 +174,16 @@ int check() {
 	else {
 		return 0;
 	}
+}
+
+int Delete() {
+	position head = top->next;
+	position temp;
+
+	while (head != NULL) {
+		temp = head->next;
+		free(head);
+		head = temp;
+	}
+	return 0;
 }
