@@ -24,7 +24,6 @@ typedef struct _stack {
 position makedirectory(position);
 position print(position);
 position exitdirectory(position);
-position changedirectory(position, char[MAX_LINE]);
 int push(pos head, position adress);
 position pop(pos current);
 pos CreateStackElement(position adressa);
@@ -115,24 +114,6 @@ position makedirectory(position p) {
 	p->child = q;
 	printf("\nUspjesno napravljen direktorij!\n\n");
 	return q;
-}
-
-position changedirectory(position p, char foldername[MAX_LINE]) {
-	position current = NULL;
-	current = p;
-
-	if (p != NULL && strcmp(p->name, foldername) != 0) {
-		changedirectory(p->sibling, foldername);
-		return current;
-	}
-	if (p == NULL) {
-		printf("\nDirektorij u koji zelite uci nepostoji\n");
-		return current;
-	}
-	else {
-		printf("\nUspjesna promjena direktorija!\n");
-		return p;
-	}
 }
 
 int push(pos head, position adr) {
