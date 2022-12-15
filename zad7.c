@@ -35,11 +35,11 @@ int deleteStack(pos);
 int main() {
 	position current = NULL;
 
-	folder root;
-	strcpy(root.name, "C");
-	root.child = NULL;
-	root.sibling = NULL;
-	current = &root;
+	folder C;
+	strcpy(C.name, "C");
+	C.child = NULL;
+	C.sibling = NULL;
+	current = &C;
 
 	stack s = { .adress = current,.next = NULL };
 	pos sroot = &s;
