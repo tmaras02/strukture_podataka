@@ -83,7 +83,7 @@ int main()
 			break;
 
 		case 6:
-			printf("\n Unesi broj koji zelis izbrisati:");
+			printf("\n Unesi broj koji zelis izbrisati: ");
 			scanf("%d", &brisi);
 			delete(root, brisi);
 			break;
@@ -165,8 +165,9 @@ int currentLevel(Position current, int lvl) {
 	if (current == NULL)
 		return 0;
 
-	if (lvl == 1)
+	if (lvl == 1) {
 		printf(" %d ", current->num);
+	}
 	else if (lvl > 1) {
 		currentLevel(current->left, lvl - 1);
 		currentLevel(current->right, lvl - 1);
@@ -192,7 +193,7 @@ Position createElement(int number)
 	newElement = (Position)malloc(sizeof(stablo));
 	if (!newElement)
 	{
-		printf("Can't allocate memory");
+		printf("\nCan't allocate memory!\n");
 		return ERROR;
 	}
 
