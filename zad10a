@@ -1,0 +1,68 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define MAX_LINE 1024
+#define ERROR -1
+struct _lista;
+typedef struct _lista* position;
+typedef struct _lista {
+	char drzava[MAX_LINE];
+	position next;
+	child gradovi;
+}lista;
+struct _stablo;
+typedef struct _stablo* child;
+typedef struct _stablo {
+	char grad[MAX_LINE];
+	int stan;
+	child left;
+	child right;
+}stablo;
+position createlist(char*, position);
+position find(char*, position);
+int main() {
+	int broj;
+	position temp;
+	char datoteka[MAX_LINE], tempfile[MAX_LINE], tempchar[MAX_LINE], tempchar2[MAX_LINE];
+	FILE* filedrz = NULL;
+	FILE* filegr = NULL;
+	lista Head;
+	Head.next = NULL;
+	Head.gradovi = NULL;
+	printf("Upisite ime datoteke\n");
+	scanf("%s", datoteka);
+	filedrz = fopen(datoteka, "r");
+	while (!feof) {
+		fscanf(datoteka, "%s %s", tempchar, tempfile);
+		createlist(tempchar, &Head);
+		filegr = fopen(tempfile, "r");
+		while (!feof) {
+			fscanf("%s %d", tempchar2, &broj);
+			temp = find(tempchar, &Head);
+		}
+	}
+	return 0;
+}
+position createlist(char* name, position p) {
+	position q = NULL;
+	q = (position)malloc(sizeof(lista));
+	strcpy(q->drzava, name);
+	q->next = NULL;
+	q->gradovi = NULL;
+	while (p->next != NULL && strcmp(p->drzava, q->drzava) > 0) {
+		p = p->next;
+	}
+	q->next = p->next;
+	p->next = q;
+	return p;
+}
+
+position find(char* name, position p) {
+	while (p != NULL && strcmp(p->drzava, name) != 0) {
+		p = p->next;
+	}
+	return p;
+}
+
+position
