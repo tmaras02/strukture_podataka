@@ -168,7 +168,7 @@ int replace(Position current) {
 }
 int printList(Pos first)
 {
-	Pos temp = first; //ne dirati ono sta smo slali u f-ju
+	Pos temp = first;
 	while (temp)
 	{
 		printf("%d ", temp->number);
