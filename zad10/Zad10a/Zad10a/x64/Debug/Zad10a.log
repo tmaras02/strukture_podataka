@@ -1,0 +1,4 @@
+﻿  Source.c
+C:\Users\roko\source\repos\Zad10a\Zad10a\Source.c(126,11): warning C4047: 'return': 'int' differs in levels of indirection from 'child'
+C:\Users\roko\source\repos\Zad10a\Zad10a\Source.c(133): warning C4715: 'printtree': not all control paths return a value
+  Zad10a.vcxproj -> C:\Users\roko\source\repos\Zad10a\x64\Debug\Zad10a.exe

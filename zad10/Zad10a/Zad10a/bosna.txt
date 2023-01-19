@@ -1,0 +1,5 @@
+Sarajevo 700000
+Mostar 10000
+Siroki 50000
+Banja Luka 40000
+Laktasi 10000

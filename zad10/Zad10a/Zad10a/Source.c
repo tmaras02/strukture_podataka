@@ -1,0 +1,187 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define MAX_LINE 1024
+#define ERROR -1
+struct _stablo;
+typedef struct _stablo* child;
+typedef struct _stablo {
+	char grad[MAX_LINE];
+	int stan;
+	child left;
+	child right;
+}stablo;
+struct _lista;
+typedef struct _lista* position;
+typedef struct _lista {
+	char drzava[MAX_LINE];
+	position next;
+	child gradovi;
+}lista;
+child searchlist(position, char*);
+position createlist(char*, position);
+child createtree(char*, int,child);
+int printlist(position);
+int printtree(child);
+int compare(char*, int, child);
+int searchtree(child, int);
+int deletelist(position);
+int deletetree(child);
+int main() {
+	int broj;
+	position temp;
+	child root = NULL;
+	char datoteka[MAX_LINE], tempfile[MAX_LINE], tempchar[MAX_LINE], tempchar2[MAX_LINE];
+	FILE* filedrz = NULL;
+	FILE* filegr = NULL;
+	lista Head;
+	Head.next = NULL;
+	Head.gradovi = NULL;
+	printf("Upisite ime datoteke\n");
+	scanf("%s", datoteka);
+	filedrz = fopen(datoteka, "r");
+	if (filedrz == NULL) {
+		printf("Datoteka tog naziva ne postoji u folderu!\n");
+		return 0;
+	}
+	while (!feof(filedrz)) {
+		root = NULL;
+		fscanf(filedrz, "%s %s", tempchar, tempfile);
+		temp=createlist(tempchar, &Head);
+		filegr = fopen(tempfile, "r");
+		if (filegr != NULL) {
+			while (!feof(filegr)) {
+				fscanf(filegr, "%s %d", tempchar2, &broj);
+				temp->gradovi = createtree(tempchar2, broj, root);
+				root = temp->gradovi;
+			}
+		}
+	}
+	fclose(filedrz);
+	fclose(filegr);
+	printlist(Head.next);
+	printf("Upisite drzavu cije bi ste gradove pretrazivali: ");
+	scanf("%s", tempchar);
+	root = searchlist(Head.next, tempchar);
+	if (root != NULL) {
+		printf("Upisite broj stanovnika da bi vidjeli koji gradovi imaju vise stanovnika od upisanog broja:");
+		scanf("%d", &broj);
+		printf("Gradovi u %s koji imaju vise od %d stanovnika:\n", tempchar, broj);
+		searchtree(root, broj);
+	}
+	deletelist(&Head);
+	return 0;
+}
+position createlist(char* name, position p) {
+	position q = NULL;
+	q = (position)malloc(sizeof(lista));
+	if (q == NULL) {
+		printf("Neuspjesna alokacije memorije!\n");
+		return q;
+	}
+	strcpy(q->drzava, name);
+	q->next = NULL;
+	q->gradovi = NULL;
+	while (p->next != NULL && strcmp(p->drzava, q->drzava) < 0) {
+		p = p->next;
+	}
+	q->next = p->next;
+	p->next = q;
+	return q;
+}
+
+child createtree(char* grad, int stanovnici, child p) {
+	if (p == NULL) {
+		child q = NULL;
+		q = (child)malloc(sizeof(stablo));
+		if (q == NULL) {
+			printf("Neuspjesna alokacija memorije!\n");
+			return q;
+		}
+		strcpy(q->grad, grad);
+		q->stan = stanovnici;
+		q->left = NULL;
+		q->right = NULL;
+		return q;
+	}
+	else if (compare(grad, stanovnici, p) > 0) {
+		p->right=createtree(grad, stanovnici, p->right);
+	}
+	else {
+		p->left=createtree(grad, stanovnici, p->left);
+	}
+	return p;
+}
+int printlist(position p) {
+	while (p != NULL) {
+		printf("Drzava: %s\nGradovi:\n", p->drzava);
+		printtree(p->gradovi);
+		p = p->next;
+	}
+	return 0;
+}
+int printtree(child p){
+	if (p == NULL) {
+		return p;
+	}
+	else {
+		printtree(p->left);
+		printf("%s, broj stanovnika: %d\n", p->grad, p->stan);
+		printtree(p->right);
+	}
+}
+int compare(char* grad,int stanovnici, child p){
+	int result;
+	result = stanovnici - p->stan;
+	if (result == 0) {
+		return strcmp(grad, p->grad);
+	}
+	return result;
+}
+child searchlist(position p, char* name) {
+	while (p != NULL && strcmp(p->drzava, name) != 0) {
+		p = p->next;
+	}
+	if (p == NULL) {
+		printf("Drzava koju trazite ne postoji u datoteci!\n");
+		return NULL;
+	}
+	return p->gradovi;
+}
+int searchtree(child p, int broj) {
+	if (p == NULL) {
+		return 0;
+	}
+	else if (p->stan < broj) {
+		searchtree(p->right,broj);
+	}
+	else {
+		searchtree(p->left, broj);
+		printf("Grad %s, broj stanovnika: %d\n", p->grad, p->stan);
+		searchtree(p->right, broj);
+	}
+	return 0;
+}
+int deletelist(position p) {
+	position q;
+	q = p->next;
+	while (p->next != NULL) {
+		p->next = q->next;
+		deletetree(q->gradovi);
+		free(q);
+		q = p->next;
+	}
+	return 0;
+}
+int deletetree(child p) {
+	if (p == NULL) {
+		return 0;
+	}
+	else {
+		deletetree(p->left);
+		deletetree(p->right);
+		free(p);
+	}
+	return 0;
+}
