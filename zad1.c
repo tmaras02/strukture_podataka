@@ -10,21 +10,21 @@
 #define MAX_NAME (150)
 #define MAX_BOD (50)
 
-typedef struct
+typedef struct _student
 {
-	char ime[MAX_NAME];
-	char prezime[MAX_NAME];
-	int bodovi;
-	int relativan_br_bodova;
-}_student;
+	char name[MAX_NAME];
+	char surname[MAX_NAME];
+	int points;
+	int relative_points;
+}student;
 
 int countStudentsFromFile(char* filename);
-int podaciStudenta(char* filename, _student*);
+int podaciStudenta(char* filename, student*);
 
 int main(void)
 {
 	char filename[MAX_FILE_NAME] = { 0 };
-	_student* osoba = NULL;
+	student* person = NULL;
 	int count = 0;
 
 	printf("Insert filename > ");
@@ -35,14 +35,14 @@ int main(void)
 
 	if (count > 0) {
 		printf("Broj studenata u datoteci %s je %d", filename, count);
-		osoba = malloc(count * sizeof(_student));
+		person = malloc(count * sizeof(student));
 
-		if (!osoba) {
+		if (!person) {
 			perror("Memory allocation failed for students!");
 			return EXIT_FAILURE;
 		}
 
-		podaciStudenta(filename, osoba, count);
+		podaciStudenta(filename, person, count);
 	}
 
 	return 0;
@@ -52,9 +52,9 @@ int countStudentsFromFile(char* filename)
 {
 	FILE* fp = NULL;
 	int count = 0;
-	char ime[MAX_NAME] = { 0 };
-	char prezime[MAX_NAME] = { 0 };
-	int bodovi = 0;
+	char name[MAX_NAME] = { 0 };
+	char surname[MAX_NAME] = { 0 };
+	int points = 0;
 
 	fp = fopen(filename, "r");
 	if (fp == NULL)
@@ -65,7 +65,7 @@ int countStudentsFromFile(char* filename)
 
 	while (!feof(fp))
 	{ // while not found end of file (EOF)
-		int result = fscanf(fp, " %s %s %d", ime, prezime, &bodovi);
+		int result = fscanf(fp, " %s %s %d", name, surname, &points);
 		if (result == 3) {
 			count++;
 		}
@@ -75,7 +75,7 @@ int countStudentsFromFile(char* filename)
 	return count;
 }
 
-int podaciStudenta(char* filename, _student* osoba, int count)
+int podaciStudenta(char* filename, student* osoba, int count)
 {
 	FILE* fp = NULL;
 	char buffer[MAX_LINE] = { 0 };
@@ -91,15 +91,15 @@ int podaciStudenta(char* filename, _student* osoba, int count)
 
 	while (!feof(fp))
 	{ // while not found end of file (EOF)
-		fscanf(fp, " %s %s %d", osoba[i].ime, osoba[i].prezime, &osoba[i].bodovi);
-		osoba[i].relativan_br_bodova = (((float)osoba[i].bodovi) / MAX_BOD) * 100;
+		fscanf(fp, " %s %s %d", osoba[i].name, osoba[i].surname, &osoba[i].points);
+		osoba[i].relative_points = ((((float)osoba[i].points) / MAX_BOD) * 100);
 		i++;
 	}
 
-	fclose(fp);
-
 	for (int j = 0; j < count; j++)
 	{
-		printf("\n%s %s %d %d", osoba[j].ime, osoba[j].prezime, osoba[j].bodovi, osoba[j].relativan_br_bodova);
+		printf("\n%s %s %d %d", osoba[j].name, osoba[j].surname, osoba[j].points, osoba[j].relative_points);
 	}
+
+	fclose(fp);
 }
